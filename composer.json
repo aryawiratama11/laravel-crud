@@ -8,7 +8,9 @@
         "email": "wailantirajoh@gmail.com"
     }],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "nwidart/laravel-modules": "^8.2"
+    },
     "autoload": {
         "psr-4": {
             "Wailan\\Crud\\": "src/"

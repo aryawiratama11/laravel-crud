@@ -31,8 +31,7 @@ class IndexView extends Command
         $class = $datas[$i];
 
         $contents =
-            '
-@extends("' . strtolower($moduleName) . '::layouts.master")
+            '@extends("' . strtolower($moduleName) . '::layouts.master")
 
 @section("content")
     <div class="row">
@@ -117,22 +116,22 @@ class IndexView extends Command
 
             ';
         $moduleDirectory = 'Modules/' . $moduleName;
-        $nameSpace = $moduleDirectory . '/resources/views' . $path . '/' . $class;
+        $nameSpace = strtolower($moduleDirectory . '/resources/views' . $path . '/' . $class);
         $fileName = "index.blade.php";
-        $filePath = $nameSpace . '/' . $fileName;
+        $filePath = strtolower($nameSpace . '/' . $fileName);
 
         if ($this->files->isDirectory($moduleDirectory)) {
             if ($this->files->isDirectory($nameSpace)) {
                 if ($this->files->isFile($filePath))
-                    return $this->error($class . ' already exists!');
+                    return $this->error($class . ' index view already exists!');
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
-                $this->info("$class created successfully!");
+                $this->info("$class index view created successfully!");
             } else {
                 $this->files->makeDirectory($nameSpace, 0777, true, true);
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
-                $this->info("$class created successfully!");
+                $this->info("$class index view created successfully!");
             }
         } else {
             return $this->error('Module ' . $moduleName . ' not found!');

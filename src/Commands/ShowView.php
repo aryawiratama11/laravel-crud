@@ -31,29 +31,29 @@ class ShowView extends Command
         $class = $datas[$i];
 
         $contents =
-            '
-            @extends("' . strtolower($moduleName) . '::layouts.master")
-            @section("content")
+            '@extends("' . strtolower($moduleName) . '::layouts.master")
 
-            @endsection
+@section("content")
+
+@endsection
             ';
         $moduleDirectory = 'Modules/' . $moduleName;
-        $nameSpace = $moduleDirectory . '/resources/views' . $path . '/' . $class;
+        $nameSpace = strtolower($moduleDirectory . '/resources/views' . $path . '/' . $class);
         $fileName = "show.blade.php";
-        $filePath = $nameSpace . '/' . $fileName;
+        $filePath = strtolower($nameSpace . '/' . $fileName);
 
         if ($this->files->isDirectory($moduleDirectory)) {
             if ($this->files->isDirectory($nameSpace)) {
                 if ($this->files->isFile($filePath))
-                    return $this->error($class . ' already exists!');
+                    return $this->error($class . ' show view already exists!');
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
-                $this->info("$class created successfully!");
+                $this->info("$class show view created successfully!");
             } else {
                 $this->files->makeDirectory($nameSpace, 0777, true, true);
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
-                $this->info("$class created successfully!");
+                $this->info("$class show view created successfully!");
             }
         } else {
             return $this->error('Module ' . $moduleName . ' not found!');

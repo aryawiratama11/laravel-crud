@@ -27,9 +27,11 @@ class CrudController extends Command
 
         $nameSpace = 'Modules\\' . $moduleName . '\http\Controllers';
         $classFolder = '';
+        $view = '';
 
         for ($i = 0; $i < count($datas) - 1; $i++) {
             $classFolder .= '\\' . $datas[$i];
+            $view .=  strtolower($datas[$i]) . '.';
         }
 
         $crudController = $datas[$i];
@@ -53,12 +55,12 @@ class ' . $crudController . 'Controller extends Controller
     public function index()
     {
         $' . Str::plural($lowerCrudController) . ' = ' . $crudController . '::paginate(5);
-        return view("' . strtolower($moduleName) . '::' . $lowerCrudController . '.index", compact("' . Str::plural($lowerCrudController) . 's"));
+        return view("' . strtolower($moduleName) . '::' . $view . $lowerCrudController . '.index", compact("' . Str::plural($lowerCrudController) . '"));
     }
 
     public function create()
     {
-        return view("' . strtolower($moduleName) . '::' . $lowerCrudController . '.create");
+        return view("' . strtolower($moduleName) . '::' . $view . $lowerCrudController . '.create");
     }
 
     public function store(Store' . $crudController . 'Request $request)
@@ -66,31 +68,31 @@ class ' . $crudController . 'Controller extends Controller
         $' . $lowerCrudController . ' = new ' . $crudController . '();
         $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request);
 
-        return redirect()->route("' . strtolower($moduleName) . '.' . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Created");
+        return redirect()->route("' . strtolower($moduleName)  . '.' . $view . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Created");
     }
 
     public function show(' . $crudController . ' $' . $lowerCrudController . ')
     {
-        return view("' . strtolower($moduleName) . '::' . $lowerCrudController . '.show", compact("' . $lowerCrudController . '"));
+        return view("' . strtolower($moduleName) . '::' . $view . $lowerCrudController . '.show", compact("' . $lowerCrudController . '"));
     }
 
     public function edit(' . $crudController . ' $' . $lowerCrudController . ')
     {
-        return view("' . strtolower($moduleName) . '::' . $lowerCrudController . '.edit", compact("' . $lowerCrudController . '"));
+        return view("' . strtolower($moduleName) . '::' . $view . $lowerCrudController . '.edit", compact("' . $lowerCrudController . '"));
     }
 
     public function update(Update' . $crudController . 'Request $request, ' . $crudController . ' $' . $lowerCrudController . ')
     {
         $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request);
 
-        return redirect()->route("' . strtolower($moduleName) . '.' . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Updated");
+        return redirect()->route("' . strtolower($moduleName)  . '.' . $view . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Updated");
     }
 
     public function destroy(' . $crudController . ' $' . $lowerCrudController . ')
     {
         $' . $lowerCrudController . '->delete();
 
-        return redirect()->route("' . strtolower($moduleName) . '.' . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Deleted!");
+        return redirect()->route("' . strtolower($moduleName)  . '.' . $view . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Deleted!");
     }
 }
 ';
@@ -139,5 +141,24 @@ class ' . $crudController . 'Controller extends Controller
         $this->call('make:migration', [
             'name' => 'create' . Str::plural($crudController) . '_table'
         ]);
+
+        if ($this->confirm('Do you want to generate CRUD View?', true)) {
+            $this->call('wailan:view-create', [
+                'class' => $this->argument('controller'),
+                'module' => $this->argument('module')
+            ]);
+            $this->call('wailan:view-index', [
+                'class' => $this->argument('controller'),
+                'module' => $this->argument('module')
+            ]);
+            $this->call('wailan:view-edit', [
+                'class' => $this->argument('controller'),
+                'module' => $this->argument('module')
+            ]);
+            $this->call('wailan:view-show', [
+                'class' => $this->argument('controller'),
+                'module' => $this->argument('module')
+            ]);
+        }
     }
 }

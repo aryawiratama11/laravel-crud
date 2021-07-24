@@ -38,7 +38,7 @@ class IndexView extends Command
         <div class="col-lg-12">
             <div class="row mb-3">
                 <div class="col-sm">
-                    <a href="{{ route("' . strtolower($moduleName) . '.admin.create") }}" class="btn btn-light border">
+                    <a href="{{ route("' . strtolower($moduleName) . '.'.strtolower($class).'.create") }}" class="btn btn-light border">
                         <i class="fas fa-plus"></i>
                     </a>
                 </div>
@@ -65,10 +65,10 @@ class IndexView extends Command
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($' . Str::plural($class) . ' as $' . strtolower($class) . ')
+                        @forelse ($' . strtolower(Str::plural($class)) . ' as $' . strtolower($class) . ')
                             <tr>
                                 <th scope="row">
-                                    {{ ($' . Str::plural($class) . '->currentpage() - 1) * $' . Str::plural($class) . '->perpage() + $loop->index + 1 }}
+                                    {{ ($' . strtolower(Str::plural($class)) . '->currentpage() - 1) * $' . strtolower(Str::plural($class)) . '->perpage() + $loop->index + 1 }}
                                 </th>
                                 <td>
                                     <div class="btn-group">
@@ -108,7 +108,7 @@ class IndexView extends Command
                 </table>
             </div>
             <div class="row justify-content-center">
-                {{ $' . Str::plural($class) . '->links("pagination::bootstrap-4") }}
+                {{ $' . strtolower(Str::plural($class)) . '->links("pagination::bootstrap-4") }}
             </div>
         </div>
     </div>

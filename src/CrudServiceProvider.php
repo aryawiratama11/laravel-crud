@@ -9,6 +9,10 @@ class CrudServiceProvider extends ServiceProvider
     protected $commands = [
         \Wailan\Crud\Commands\CrudController::class,
         \Wailan\Crud\Commands\Repository::class,
+        \Wailan\Crud\Commands\IndexView::class,
+        \Wailan\Crud\Commands\CreateView::class,
+        \Wailan\Crud\Commands\EditView::class,
+        \Wailan\Crud\Commands\ShowView::class,
     ];
 
     public function boot()

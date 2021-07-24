@@ -135,7 +135,7 @@ class ' . $crudController . 'Controller extends Controller
             'module' => $moduleName
         ]);
         $this->call('make:migration', [
-            'name' => 'create_' . Str::plural($crudController) . '_table'
+            'name' => 'create' . Str::plural($crudController) . '_table'
         ]);
     }
 }

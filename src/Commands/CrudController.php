@@ -25,24 +25,26 @@ class CrudController extends Command
 
         $datas = explode('/', $crudController);
 
-        $folderPath = 'Modules\\' . $moduleName . '\http\Controllers';
+        $nameSpace = 'Modules\\' . $moduleName . '\http\Controllers';
+        $classFolder = '';
 
         for ($i = 0; $i < count($datas) - 1; $i++) {
-            $folderPath .= '\\' . $datas[$i];
+            $classFolder .= '\\' . $datas[$i];
         }
 
         $crudController = $datas[$i];
+        $nameSpace .= $classFolder;
 
         $lowerCrudController = strtolower($crudController);
 
         $contents =
             '<?php
 
-namespace ' . $folderPath . ';
+namespace ' . $nameSpace . ';
 
 use Illuminate\Routing\Controller;
 use Modules\\' . $moduleName . '\Entities\\' . $crudController . ';
-use Modules\\' . $moduleName . '\http\Repositories\\' . $crudController . 'Repository;
+use Modules\\' . $moduleName . '\http\Repositories' . $classFolder . '\\' . $crudController . 'Repository;
 use Modules\\' . $moduleName . '\Http\Requests\Store' . $crudController . 'Request;
 use Modules\\' . $moduleName . '\Http\Requests\Update' . $crudController . 'Request;
 
@@ -50,8 +52,8 @@ class ' . $crudController . 'Controller extends Controller
 {
     public function index()
     {
-        $' . $lowerCrudController . 's = ' . $crudController . '::paginate(5);
-        return view("' .strtolower( $moduleName ). '::' . $lowerCrudController . '.index", compact("' . $lowerCrudController . 's"));
+        $' . Str::plural($lowerCrudController) . ' = ' . $crudController . '::paginate(5);
+        return view("' . strtolower($moduleName) . '::' . $lowerCrudController . '.index", compact("' . Str::plural($lowerCrudController) . 's"));
     }
 
     public function create()
@@ -64,7 +66,7 @@ class ' . $crudController . 'Controller extends Controller
         $' . $lowerCrudController . ' = new ' . $crudController . '();
         $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request);
 
-        return redirect()->route("admin.' . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Created");
+        return redirect()->route("' . strtolower($moduleName) . '.' . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Created");
     }
 
     public function show(' . $crudController . ' $' . $lowerCrudController . ')
@@ -94,21 +96,21 @@ class ' . $crudController . 'Controller extends Controller
 ';
         $fileName = $crudController . 'Controller.php';
 
-        $filePath = $folderPath . '/' . $fileName;
+        $filePath = $nameSpace . '/' . $fileName;
 
         if ($this->files->isDirectory('Modules/' . $moduleName)) {
-            if ($this->files->isDirectory($folderPath)) {
+            if ($this->files->isDirectory($nameSpace)) {
                 if ($this->files->isFile($filePath))
                     return $this->error($crudController . ' already exists!');
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
-                $this->callOther($this->argument('controller'), $this->argument('module'));
+                $this->callOther($crudController, $this->argument('module'));
                 $this->info("$crudController created successfully!");
             } else {
-                $this->files->makeDirectory($folderPath, 0777, true, true);
+                $this->files->makeDirectory($nameSpace, 0777, true, true);
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
-                $this->callOther($this->argument('controller'), $this->argument('module'));
+                $this->callOther($crudController, $this->argument('module'));
                 $this->info("$crudController created successfully!");
             }
         } else {
@@ -123,7 +125,7 @@ class ' . $crudController . 'Controller extends Controller
             'module' => $moduleName
         ]);
         $this->call('wailan:repository', [
-            'class' => $crudController,
+            'class' => $this->argument('controller'),
             'module' => $moduleName
         ]);
         $this->call('module:make-request', [

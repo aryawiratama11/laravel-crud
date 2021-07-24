@@ -22,11 +22,21 @@ class Repository extends Command
         $repositoryClassName = $this->argument('class');
         $moduleName = $this->argument('module');
 
+        $datas = explode('/', $repositoryClassName);
+
+        $nameSpace = 'Modules\\' . $moduleName . '\http\Repositories';
+
+        for ($i = 0; $i < count($datas) - 1; $i++) {
+            $nameSpace .= '\\' . $datas[$i];
+        }
+
+        $repositoryClassName = $datas[$i];
+
         $contents =
             '<?php
-namespace Modules\\' . $moduleName . '\http\Repositories;
+namespace ' . $nameSpace . ';
 
-use Modules\\'.$moduleName.'\Entities\\' . $repositoryClassName . ';
+use Modules\\' . $moduleName . '\Entities\\' . $repositoryClassName . ';
 
 class ' . $repositoryClassName . 'Repository
 {
@@ -39,19 +49,18 @@ class ' . $repositoryClassName . 'Repository
 }';
         $fileName = "${repositoryClassName}Repository.php";
         $moduleDirectory = 'Modules/' . $moduleName;
-        $repositoryDirectory = $moduleDirectory . '/Http/Repositories';
 
-        $filePath = $repositoryDirectory . '/' . $fileName;
+        $filePath = $nameSpace . '/' . $fileName;
 
         if ($this->files->isDirectory($moduleDirectory)) {
-            if ($this->files->isDirectory($repositoryDirectory)) {
+            if ($this->files->isDirectory($nameSpace)) {
                 if ($this->files->isFile($filePath))
                     return $this->error($repositoryClassName . ' already exists!');
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
                 $this->info("$repositoryClassName created successfully!");
             } else {
-                $this->files->makeDirectory($repositoryDirectory, 0777, true, true);
+                $this->files->makeDirectory($nameSpace, 0777, true, true);
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
                 $this->info("$repositoryClassName created successfully!");

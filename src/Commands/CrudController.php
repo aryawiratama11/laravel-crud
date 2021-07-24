@@ -138,11 +138,12 @@ class ' . $crudController . 'Controller extends Controller
             'name' => 'Update' . $crudController . 'Request',
             'module' => $moduleName
         ]);
+
+        $this->line('Please wait untill migration finish');
+
         $this->call('make:migration', [
             'name' => 'create' . Str::plural($crudController) . '_table'
         ]);
-
-        $this->line('Please wait untill migration finish');
 
         if ($this->confirm('Do you want to generate CRUD View?', true)) {
             $this->call('wailan:view-create', [

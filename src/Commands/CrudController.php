@@ -103,7 +103,7 @@ class ' . $crudController . 'Controller extends Controller
         if ($this->files->isDirectory('Modules/' . $moduleName)) {
             if ($this->files->isDirectory($nameSpace)) {
                 if ($this->files->isFile($filePath))
-                    return $this->error($crudController . ' already exists!');
+                    return $this->error($crudController . 'Controller already exists!');
                 if (!$this->files->put($filePath, $contents))
                     return $this->error('failed!');
                 $this->callOther($crudController, $this->argument('module'));

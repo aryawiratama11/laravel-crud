@@ -1,4 +1,4 @@
-# Crud generator
+# Module CRUD Generator
 
 This is a extended package for [Laravel-Module](https://nwidart.com/laravel-modules/v6/introduction) Package.
 built for rapid development purpose.

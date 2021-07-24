@@ -1,0 +1,24 @@
+{
+    "name": "wailan/crud",
+    "description": "Create a quick CRUD generator for Laravel Project",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name": "WailanTirajoh",
+        "email": "wailantirajoh@gmail.com"
+    }],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Wailan\\Crud\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wailan\\Crud\\CrudServiceProvider"
+            ]
+        }
+    }
+}

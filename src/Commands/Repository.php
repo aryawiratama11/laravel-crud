@@ -7,7 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 
 class Repository extends Command
 {
-    protected $signature = 'concrete:repository {class} {module}';
+    protected $signature = 'wailan:repository {class} {module}';
     protected $description = 'Create a new repository class for the specified module';
     protected $files;
 

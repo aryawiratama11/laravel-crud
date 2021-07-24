@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 class CrudController extends Command
 {
-    protected $signature = 'concrete:crud {controller} {module}';
+    protected $signature = 'wailan:crud {controller} {module}';
     protected $description = 'Create a new crud controller class for the specified module';
     protected $files;
 
@@ -122,7 +122,7 @@ class ' . $crudController . 'Controller extends Controller
             'model' => $crudController,
             'module' => $moduleName
         ]);
-        $this->call('concrete:repository', [
+        $this->call('wailan:repository', [
             'class' => $crudController,
             'module' => $moduleName
         ]);

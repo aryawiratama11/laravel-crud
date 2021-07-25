@@ -38,9 +38,11 @@ class IndexView extends Command
         <div class="col-lg-12">
             <div class="row mb-3">
                 <div class="col-sm">
-                    <a href="{{ route("' . strtolower($moduleName) . '.'.strtolower($class).'.create") }}" class="btn btn-light border">
-                        <i class="fas fa-plus"></i>
-                    </a>
+                    @can("' . strtolower($moduleName) . '-create")
+                        <a href="{{ route("' . strtolower($moduleName) . '.'.strtolower($class).'.create") }}" class="btn btn-light border">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                    @endcan
                 </div>
                 <div class="col-sm">
                     <form>
@@ -77,14 +79,19 @@ class IndexView extends Command
                                             <i class="fas fa-ellipsis-v"></i>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item"
-                                                href="{{ route("' . strtolower($moduleName) . '.' . strtolower($class) . '.show", ["' . strtolower($class) . '" => $' . strtolower($class) . ']) }}">
-                                                Show
-                                            </a>
+                                            @can("' . strtolower($moduleName) . '-access")
+                                                <a class="dropdown-item"
+                                                    href="{{ route("' . strtolower($moduleName) . '.' . strtolower($class) . '.show", ["' . strtolower($class) . '" => $' . strtolower($class) . ']) }}">
+                                                    Show
+                                                </a>
+                                            @endcan
+                                            @can("' . strtolower($moduleName) . '-edit")
                                             <a class="dropdown-item"
                                                 href="{{ route("' . strtolower($moduleName) . '.' . strtolower($class) . '.edit", ["' . strtolower($class) . '" => $' . strtolower($class) . ']) }}">
                                                 Edit
                                             </a>
+                                            @endcan
+                                            @can("' . strtolower($moduleName) . '-delete")
                                             <div class="dropdown-divider"></div>
                                             <form onsubmit="return confirm("Are you sure?")"
                                                 action="{{ route("' . strtolower($moduleName) . '.' . strtolower($class) . '.destroy", ["' . strtolower($class) . '" => $' . strtolower($class) . ']) }}"
@@ -93,6 +100,7 @@ class IndexView extends Command
                                                 @csrf
                                                 <button class="dropdown-item" type="submit">Delete</button>
                                             </form>
+                                            @endcan
                                         </div>
                                     </div>
                                 </td>

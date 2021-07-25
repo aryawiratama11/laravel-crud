@@ -74,7 +74,7 @@ class EditView extends Command
                         <textarea class="form-control" name="exampleFormControlTextarea1" id="exampleFormControlTextarea1" rows="3">{{ old("exampleFormControlTextarea1") }}</textarea>
                     </div>
                 </div>
-                <button class="btn btn-sm btn-primary my-2 w-100 text-bold">
+                <button class="btn btn-sm btn-primary my-2 w-100 text-bold" type="submit">
                     {{ __("Submit") }}
                 </button>
             </form>

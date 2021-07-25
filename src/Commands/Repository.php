@@ -24,19 +24,19 @@ class Repository extends Command
 
         $datas = explode('/', $repositoryClassName);
 
-        $nameSpace = 'Modules\\' . $moduleName . '\http\Repositories';
+        $nameSpace = 'Modules\\' . ucwords($moduleName) . '\Http\Repositories';
 
         for ($i = 0; $i < count($datas) - 1; $i++) {
-            $nameSpace .= '\\' . $datas[$i];
+            $nameSpace .= '\\' . ucwords($datas[$i]);
         }
 
-        $repositoryClassName = $datas[$i];
+        $repositoryClassName = ucwords($datas[$i]);
 
         $contents =
             '<?php
 namespace ' . $nameSpace . ';
 
-use Modules\\' . $moduleName . '\Entities\\' . $repositoryClassName . ';
+use Modules\\' . ($moduleName) . '\Entities\\' . $repositoryClassName . ';
 
 class ' . $repositoryClassName . 'Repository
 {

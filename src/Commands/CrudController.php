@@ -25,12 +25,12 @@ class CrudController extends Command
 
         $datas = explode('/', $crudController);
 
-        $nameSpace = 'Modules\\' . $moduleName . '\http\Controllers';
+        $nameSpace = 'Modules\\' . ucwords($moduleName) . '\Http\Controllers';
         $classFolder = '';
         $view = '';
 
         for ($i = 0; $i < count($datas) - 1; $i++) {
-            $classFolder .= '\\' . $datas[$i];
+            $classFolder .= '\\' . ucwords($datas[$i]);
             $view .=  strtolower($datas[$i]) . '.';
         }
 

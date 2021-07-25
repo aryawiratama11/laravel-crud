@@ -13,11 +13,12 @@ class CrudServiceProvider extends ServiceProvider
         \Wailan\Crud\Commands\CreateView::class,
         \Wailan\Crud\Commands\EditView::class,
         \Wailan\Crud\Commands\ShowView::class,
+        \Wailan\Crud\Commands\PermissionSeeder::class,
     ];
 
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        // $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
     }
 
     public function register()

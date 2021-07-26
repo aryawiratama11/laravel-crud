@@ -1,6 +1,6 @@
 <?php
 
-namespace Wailan\Crud\Commands;
+namespace Wailan\Crud\Commands\Seeder;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;

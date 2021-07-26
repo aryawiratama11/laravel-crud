@@ -1,6 +1,6 @@
 <?php
 
-namespace Wailan\Crud\Commands;
+namespace Wailan\Crud\Commands\View;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;

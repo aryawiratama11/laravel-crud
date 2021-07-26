@@ -31,67 +31,27 @@ class Web extends Command
         $class = $datas[$i];
 
         $contents =
-            '@extends("' . strtolower($moduleName) . '::layouts.master")
-
-@section("content")
-    <div class="row">
-        <div class="col-lg-12">
-            <form action="{{ route("' . strtolower($moduleName) . '.' . strtolower($class) . '.update", ["' . strtolower($class) . '" => $' . strtolower($class) . ']) }}" method="POST">
-                @csrf
-                <div class="bg-white border rounded p-4">
-                    <div class="form-group">
-                        <label for="name">{{ __("Name") }}</label>
-                        <input type="name" name="name" class="form-control @error("name") is-invalid @enderror" id="name"
-                            placeholder="example name" value="{{ old("name") }}">
-                        @error("name")
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Example select</label>
-                        <select class="form-control" name="exampleFormControlSelect1" id="exampleFormControlSelect1" value="{{ old("exampleFormControlSelect1") }}">>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect2">Example multiple select</label>
-                        <select multiple class="form-control" name="exampleFormControlSelect2" id="exampleFormControlSelect2" value="{{ old("exampleFormControlSelect2") }}">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Example textarea</label>
-                        <textarea class="form-control" name="exampleFormControlTextarea1" id="exampleFormControlTextarea1" rows="3">{{ old("exampleFormControlTextarea1") }}</textarea>
-                    </div>
-                </div>
-                <button class="btn btn-sm btn-primary my-2 w-100 text-bold" type="submit">
-                    {{ __("Submit") }}
-                </button>
-            </form>
-        </div>
-    </div>
-@endsection
+            '
+Route::group(["as" => "' . strtolower($moduleName) . '."], function () {
+    Route::resource("' . strtolower($class) . '", ' . ucwords($class) . 'Controller::class);
+});
             ';
+
         $moduleDirectory = 'Modules/' . $moduleName;
-        $nameSpace = strtolower($moduleDirectory . '/resources/views' . $path . '/' . $class);
-        $fileName = "edit.blade.php";
+        $nameSpace = strtolower($moduleDirectory . '/routes');
+        $fileName = "web.php";
         $filePath = strtolower($nameSpace . '/' . $fileName);
+        // dd($filePath);
 
         if ($this->files->isDirectory($moduleDirectory)) {
             if ($this->files->isDirectory($nameSpace)) {
-                if ($this->files->isFile($filePath))
-                    return $this->error($class . ' edit view already exists!');
-                if (!$this->files->put($filePath, $contents))
+                // if ($this->files->isFile($filePath))
+                //     return $this->error($class . ' edit view already exists!');
+                // if (!$this->files->put($filePath, $contents))
+                //     return $this->error('failed!');
+                // dd('tes');
+                $newContent = file_get_contents($filePath) . $contents;
+                if (!$this->files->put($filePath, $newContent))
                     return $this->error('failed!');
                 $this->info("$class edit view created successfully!");
             } else {

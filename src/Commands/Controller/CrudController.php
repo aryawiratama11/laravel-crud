@@ -135,14 +135,17 @@ class ' . $crudController . 'Controller extends Controller
 
     public function callOther($crudController, $moduleName)
     {
+        $this->info('Generating model');
         $this->call('module:make-model', [
             'model' => $crudController,
             'module' => $moduleName
         ]);
+        $this->info('Generating repository');
         $this->call('wailan:repository', [
             'class' => $this->argument('controller'),
             'module' => $moduleName
         ]);
+        $this->info('Generating request');
         $this->call('module:make-request', [
             'name' => 'Store' . $crudController . 'Request',
             'module' => $moduleName
@@ -151,10 +154,16 @@ class ' . $crudController . 'Controller extends Controller
             'name' => 'Update' . $crudController . 'Request',
             'module' => $moduleName
         ]);
+        $this->info('Updating route');
+        $this->call('wailan:route-web', [
+            'class' => $crudController,
+            'module' => $moduleName
+        ]);
+        $this->info('Generating permission');
         $this->call('wailan:permission', [
             'class' => $this->argument('controller'),
         ]);
-
+        $this->info('Generating migration');
         $this->info('Please wait untill migration finish');
 
         $this->call('make:migration', [
@@ -162,6 +171,7 @@ class ' . $crudController . 'Controller extends Controller
         ]);
 
         if ($this->confirm('Do you want to generate CRUD View?', true)) {
+            $this->info('Generating CRUD View');
             $this->call('wailan:view-create', [
                 'class' => $this->argument('controller'),
                 'module' => $this->argument('module')

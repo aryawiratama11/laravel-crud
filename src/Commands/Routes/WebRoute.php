@@ -4,9 +4,8 @@ namespace Wailan\Crud\Commands\Routes;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 
-class Web extends Command
+class WebRoute extends Command
 {
     protected $signature = 'wailan:route-web {class} {module}';
     protected $description = 'Modify a web routes for the specified class and module';
@@ -41,15 +40,9 @@ Route::group(["as" => "' . strtolower($moduleName) . '."], function () {
         $nameSpace = strtolower($moduleDirectory . '/routes');
         $fileName = "web.php";
         $filePath = strtolower($nameSpace . '/' . $fileName);
-        // dd($filePath);
 
         if ($this->files->isDirectory($moduleDirectory)) {
             if ($this->files->isDirectory($nameSpace)) {
-                // if ($this->files->isFile($filePath))
-                //     return $this->error($class . ' edit view already exists!');
-                // if (!$this->files->put($filePath, $contents))
-                //     return $this->error('failed!');
-                // dd('tes');
                 $newContent = file_get_contents($filePath) . $contents;
                 if (!$this->files->put($filePath, $newContent))
                     return $this->error('failed!');

@@ -14,7 +14,7 @@ class CrudServiceProvider extends ServiceProvider
         \Wailan\Crud\Commands\View\EditView::class,
         \Wailan\Crud\Commands\View\ShowView::class,
         \Wailan\Crud\Commands\Seeder\PermissionSeeder::class,
-        \Wailan\Crud\Commands\Routes\Web::class,
+        \Wailan\Crud\Commands\Routes\WebRoute::class
     ];
 
     public function boot()

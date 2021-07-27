@@ -47,13 +47,13 @@ class ' . $class . 'PermissionSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            "' . $class . '-access",
-            "' . $class . '-create",
-            "' . $class . '-store",
-            "' . $class . '-edit",
-            "' . $class . '-show",
-            "' . $class . '-update",
-            "' . $class . '-delete",
+            "' . strtolower($class) . '-access",
+            "' . strtolower($class) . '-create",
+            "' . strtolower($class) . '-store",
+            "' . strtolower($class) . '-edit",
+            "' . strtolower($class) . '-show",
+            "' . strtolower($class) . '-update",
+            "' . strtolower($class) . '-delete",
         ];
 
         $permissionsColor = [

@@ -1,6 +1,6 @@
 <?php
 
-namespace Wailan\Crud;
+namespace Wailan\Crud\Services;
 
 use Illuminate\Database\Eloquent\Collection;
 

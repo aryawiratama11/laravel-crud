@@ -72,7 +72,7 @@ class ' . $crudController . 'Controller extends Controller
         abort_if(Gate::denies("' . $lowerCrudController . '-store"), 403);
 
         $' . $lowerCrudController . ' = new ' . $crudController . '();
-        $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request);
+        $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request->validated());
 
         return redirect()->route("' . strtolower($moduleName)  . '.' . $view . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Created");
     }
@@ -95,7 +95,7 @@ class ' . $crudController . 'Controller extends Controller
     {
         abort_if(Gate::denies("' . $lowerCrudController . '-update"), 403);
 
-        $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request);
+        $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request->validated();
 
         return redirect()->route("' . strtolower($moduleName)  . '.' . $view . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Updated");
     }

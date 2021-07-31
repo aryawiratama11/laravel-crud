@@ -1,0 +1,14 @@
+<?php
+namespace $NAMESPACE$;
+
+use Modules\$MODULENAME$\Entities\$CLASSNAME$;
+
+class $CLASSNAME$Repository
+{
+    public static function storeOrUpdate($CLASSNAME$ $$LOWERCLASSNAME$, $data)
+    {
+        // add here
+
+        return $$LOWERCLASSNAME$;
+    }
+}

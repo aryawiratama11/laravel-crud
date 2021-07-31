@@ -1,0 +1,68 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Gate;
+use Modules\$MODULENAME$\Entities\$CLASSNAME$;
+use Modules\$MODULENAME$\Http\Repositories$CLASSFOLDER$\$CLASSNAME$Repository;
+use Modules\$MODULENAME$\Http\Requests\Store$CLASSNAME$Request;
+use Modules\$MODULENAME$\Http\Requests\Update$CLASSNAME$Request;
+
+class $CLASSNAME$Controller extends Controller
+{
+    public function index()
+    {
+        abort_if(Gate::denies("$LOWERCLASSNAME$-access"), 403);
+
+        $$PLURALLOWERCLASSNAME$ = $CLASSNAME$::paginate(5);
+        return view("$LOWERMODULENAME$::$VIEW$$LOWERCLASSNAME$.index", compact("$PLURALLOWERCLASSNAME$"));
+    }
+
+    public function create()
+    {
+        abort_if(Gate::denies("$LOWERCLASSNAME$-create"), 403);
+        return view("$LOWERMODULENAME$::$VIEW$$LOWERCLASSNAME$.create");
+    }
+
+    public function store(Store$CLASSNAME$Request $request)
+    {
+        abort_if(Gate::denies("$LOWERCLASSNAME$-store"), 403);
+
+        $$LOWERCLASSNAME$ = new $CLASSNAME$();
+        $$LOWERCLASSNAME$ = $CLASSNAME$Repository::storeOrUpdate($$LOWERCLASSNAME$, $request->validated());
+
+        return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Created");
+    }
+
+    public function show($CLASSNAME$ $$LOWERCLASSNAME$)
+    {
+        abort_if(Gate::denies("$LOWERCLASSNAME$-show"), 403);
+
+        return view("$LOWERMODULENAME$::$VIEW$$LOWERCLASSNAME$.show", compact("$LOWERCLASSNAME$"));
+    }
+
+    public function edit($CLASSNAME$ $$LOWERCLASSNAME$)
+    {
+        abort_if(Gate::denies("$LOWERCLASSNAME$-edit"), 403);
+
+        return view("$LOWERMODULENAME$::$VIEW$$LOWERCLASSNAME$.edit", compact("$LOWERCLASSNAME$"));
+    }
+
+    public function update(Update$CLASSNAME$Request $request, $CLASSNAME$ $$LOWERCLASSNAME$)
+    {
+        abort_if(Gate::denies("$LOWERCLASSNAME$-update"), 403);
+
+        $$LOWERCLASSNAME$ = $CLASSNAME$Repository::storeOrUpdate($$LOWERCLASSNAME$, $request->validated());
+
+        return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Updated");
+    }
+
+    public function destroy($CLASSNAME$ $$LOWERCLASSNAME$)
+    {
+        abort_if(Gate::denies("$LOWERCLASSNAME$-delete"), 403);
+        $$LOWERCLASSNAME$->delete();
+
+        return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Deleted!");
+    }
+}

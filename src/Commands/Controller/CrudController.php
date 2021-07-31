@@ -5,10 +5,14 @@ namespace Wailan\Crud\Commands\Controller;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Wailan\Crud\Commands\Traits\CommandGenerator;
+use Wailan\Crud\Services\Stub;
 
 class CrudController extends Command
 {
-    protected $signature = 'wailan:crud {controller} {module}';
+    use CommandGenerator;
+
+    protected $signature = 'wailan:crud {class} {module}';
     protected $description = 'Create a new crud controller class for the specified module';
     protected $files;
 
@@ -20,172 +24,82 @@ class CrudController extends Command
 
     public function handle()
     {
-        $crudController = $this->argument('controller');
-        $moduleName = $this->argument('module');
+        $this->generator('Modules\\' . ucwords($this->argument('module')) . '\Http\Controllers');
 
-        $datas = explode('/', $crudController);
+        $contents = $this->getTemplateContents();
+        $filePath = $this->generateFilePath('Controller.php');
 
-        $nameSpace = 'Modules\\' . ucwords($moduleName) . '\Http\Controllers';
-        $classFolder = '';
-        $view = '';
+        $this->createFile($filePath, $contents);
+        $this->callOther($this->className, $this->argument('module'));
+    }
 
-        for ($i = 0; $i < count($datas) - 1; $i++) {
-            $classFolder .= '\\' . ucwords($datas[$i]);
-            $view .=  strtolower($datas[$i]) . '.';
-        }
-
-        $crudController = $datas[$i];
-        $nameSpace .= $classFolder;
-
-        $lowerCrudController = strtolower($crudController);
-
-        $contents =
-            '<?php
-
-namespace ' . $nameSpace . ';
-
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Gate;
-use Modules\\' . $moduleName . '\Entities\\' . $crudController . ';
-use Modules\\' . $moduleName . '\http\Repositories' . $classFolder . '\\' . $crudController . 'Repository;
-use Modules\\' . $moduleName . '\Http\Requests\Store' . $crudController . 'Request;
-use Modules\\' . $moduleName . '\Http\Requests\Update' . $crudController . 'Request;
-
-class ' . $crudController . 'Controller extends Controller
-{
-    public function index()
+    protected function getTemplateContents(): string
     {
-        abort_if(Gate::denies("' . $lowerCrudController . '-access"), 403);
-
-        $' . Str::plural($lowerCrudController) . ' = ' . $crudController . '::paginate(5);
-        return view("' . strtolower($moduleName) . '::' . $view . $lowerCrudController . '.index", compact("' . Str::plural($lowerCrudController) . '"));
+        return (new Stub('/controller.stub', [
+            'NAMESPACE' => $this->nameSpace,
+            'CLASSFOLDER' => $this->classFolder,
+            'MODULENAME' => $this->argument('module'),
+            'LOWERMODULENAME' => strtolower($this->argument('module')),
+            'CLASSNAME' => $this->className,
+            'LOWERCLASSNAME' => strtolower($this->className),
+            'PLURALLOWERCLASSNAME' => Str::plural(strtolower($this->className)),
+            'VIEW' => $this->view
+        ]))->render();
     }
 
-    public function create()
-    {
-        abort_if(Gate::denies("' . $lowerCrudController . '-create"), 403);
-        return view("' . strtolower($moduleName) . '::' . $view . $lowerCrudController . '.create");
-    }
-
-    public function store(Store' . $crudController . 'Request $request)
-    {
-        abort_if(Gate::denies("' . $lowerCrudController . '-store"), 403);
-
-        $' . $lowerCrudController . ' = new ' . $crudController . '();
-        $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request->validated());
-
-        return redirect()->route("' . strtolower($moduleName)  . '.' . $view . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Created");
-    }
-
-    public function show(' . $crudController . ' $' . $lowerCrudController . ')
-    {
-        abort_if(Gate::denies("' . $lowerCrudController . '-show"), 403);
-
-        return view("' . strtolower($moduleName) . '::' . $view . $lowerCrudController . '.show", compact("' . $lowerCrudController . '"));
-    }
-
-    public function edit(' . $crudController . ' $' . $lowerCrudController . ')
-    {
-        abort_if(Gate::denies("' . $lowerCrudController . '-edit"), 403);
-
-        return view("' . strtolower($moduleName) . '::' . $view . $lowerCrudController . '.edit", compact("' . $lowerCrudController . '"));
-    }
-
-    public function update(Update' . $crudController . 'Request $request, ' . $crudController . ' $' . $lowerCrudController . ')
-    {
-        abort_if(Gate::denies("' . $lowerCrudController . '-update"), 403);
-
-        $' . $lowerCrudController . ' = ' . $crudController . 'Repository::storeOrUpdate($' . $lowerCrudController . ', $request->validated();
-
-        return redirect()->route("' . strtolower($moduleName)  . '.' . $view . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Updated");
-    }
-
-    public function destroy(' . $crudController . ' $' . $lowerCrudController . ')
-    {
-        abort_if(Gate::denies("' . $lowerCrudController . '-delete"), 403);
-        $' . $lowerCrudController . '->delete();
-
-        return redirect()->route("' . strtolower($moduleName)  . '.' . $view . $lowerCrudController . '.index")->with("success", $' . $lowerCrudController . '->name . " Deleted!");
-    }
-}
-';
-        $fileName = $crudController . 'Controller.php';
-
-        $filePath = $nameSpace . '/' . $fileName;
-
-        if ($this->files->isDirectory('Modules/' . $moduleName)) {
-            if ($this->files->isDirectory($nameSpace)) {
-                if ($this->files->isFile($filePath))
-                    return $this->error($crudController . 'Controller already exists!');
-                if (!$this->files->put($filePath, $contents))
-                    return $this->error('failed!');
-                $this->callOther($crudController, $this->argument('module'));
-                $this->info("$crudController created successfully!");
-            } else {
-                $this->files->makeDirectory($nameSpace, 0777, true, true);
-                if (!$this->files->put($filePath, $contents))
-                    return $this->error('failed!');
-                $this->callOther($crudController, $this->argument('module'));
-                $this->info("$crudController created successfully!");
-            }
-        } else {
-            return $this->error('Module ' . $moduleName . ' not found!');
-        }
-    }
-
-    public function callOther($crudController, $moduleName)
+    public function callOther()
     {
         $this->info('Generating model');
         $this->call('module:make-model', [
-            'model' => $crudController,
-            'module' => $moduleName
+            'model' => $this->className,
+            'module' => $this->argument('module')
         ]);
         $this->info('Generating repository');
         $this->call('wailan:repository', [
-            'class' => $this->argument('controller'),
-            'module' => $moduleName
+            'class' => $this->argument('class'),
+            'module' => $this->argument('module')
         ]);
         $this->info('Generating request');
         $this->call('module:make-request', [
-            'name' => 'Store' . $crudController . 'Request',
-            'module' => $moduleName
+            'name' => 'Store' . $this->className . 'Request',
+            'module' => $this->argument('module')
         ]);
         $this->call('module:make-request', [
-            'name' => 'Update' . $crudController . 'Request',
-            'module' => $moduleName
+            'name' => 'Update' . $this->className . 'Request',
+            'module' => $this->argument('module')
         ]);
         $this->info('Updating route');
         $this->call('wailan:route-web', [
-            'class' => $crudController,
-            'module' => $moduleName
+            'class' => $this->className,
+            'module' => $this->argument('module')
         ]);
         $this->info('Generating permission');
         $this->call('wailan:permission', [
-            'class' => $this->argument('controller'),
+            'class' => $this->argument('class'),
         ]);
         $this->info('Generating migration');
         $this->info('Please wait untill migration finish');
 
         $this->call('make:migration', [
-            'name' => 'create' . Str::plural($crudController) . '_table'
+            'name' => 'create' . Str::plural($this->className) . '_table'
         ]);
 
         if ($this->confirm('Do you want to generate CRUD View?', true)) {
             $this->info('Generating CRUD View');
             $this->call('wailan:view-create', [
-                'class' => $this->argument('controller'),
+                'class' => $this->argument('class'),
                 'module' => $this->argument('module')
             ]);
             $this->call('wailan:view-index', [
-                'class' => $this->argument('controller'),
+                'class' => $this->argument('class'),
                 'module' => $this->argument('module')
             ]);
             $this->call('wailan:view-edit', [
-                'class' => $this->argument('controller'),
+                'class' => $this->argument('class'),
                 'module' => $this->argument('module')
             ]);
             $this->call('wailan:view-show', [
-                'class' => $this->argument('controller'),
+                'class' => $this->argument('class'),
                 'module' => $this->argument('module')
             ]);
         }

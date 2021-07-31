@@ -7,6 +7,7 @@ built for rapid development purpose.
 ```
 // Install required package
 composer require nwidart/laravel-modules
+composer require spatie/laravel-permission
 
 // then install this packe, NOTE: only support composer v2
 composer require wailan/crud  

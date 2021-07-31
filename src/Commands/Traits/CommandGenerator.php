@@ -28,12 +28,12 @@ trait CommandGenerator
                     return $this->error($pathToFile . '/' . $fileName . ' already exists!');
                 if (!$this->files->put($pathToFile . '/' . $fileName, $contents))
                     return $this->error('failed!');
-                $this->info("Created : $pathToFile'/'$fileName");
+                $this->info("Created : $pathToFile/$fileName");
             } else {
                 $this->files->makeDirectory($pathToFile, 0777, true, true);
                 if (!$this->files->put($pathToFile . '/' . $fileName, $contents))
                     return $this->error('failed!');
-                $this->info("Created : $pathToFile'/'$fileName");
+                $this->info("Created : $pathToFile/$fileName");
             }
         } else {
             return $this->error('Module ' . $this->argument('module') . ' not found!');

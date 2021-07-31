@@ -3,8 +3,6 @@
 namespace Wailan\Crud\Commands\Repositories;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 use Wailan\Crud\Commands\Traits\CommandGenerator;
 use Wailan\Crud\Services\Stub;
 
@@ -14,22 +12,16 @@ class Repository extends Command
 
     protected $signature = 'wailan:repository {class} {module}';
     protected $description = 'Create a new repository class for the specified module';
-    protected $files;
-
-    public function __construct(Filesystem $files)
-    {
-        $this->files = $files;
-        parent::__construct();
-    }
 
     public function handle()
     {
         $this->generator('Modules\\' . ucwords($this->argument('module')) . '\Http\Repositories');
 
         $contents = $this->getTemplateContents();
-        $filePath = $this->generateFilePath('Repository.php');
+        $filePath = strtolower($this->nameSpace);
+        $fileName = $this->className.'Repository.php';
 
-        $this->createFile($filePath, $contents);
+        $this->createFile($filePath,$fileName, $contents);
     }
 
     protected function getTemplateContents(): string

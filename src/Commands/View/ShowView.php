@@ -3,60 +3,37 @@
 namespace Wailan\Crud\Commands\View;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
+use Wailan\Crud\Commands\Traits\CommandGenerator;
+use Wailan\Crud\Services\Stub;
 
 class ShowView extends Command
 {
+    use CommandGenerator;
+
     protected $signature = 'wailan:view-show {class} {module}';
     protected $description = 'Create a new show view for the specified class and module';
-    protected $files;
-
-    public function __construct(Filesystem $files)
-    {
-        $this->files = $files;
-        parent::__construct();
-    }
 
     public function handle()
     {
-        $class = $this->argument('class');
-        $moduleName = $this->argument('module');
+        $this->generator('Modules/' . ucwords($this->argument('module')) . '/resources/views');
 
-        $datas = explode('/', $class);
-        $path = '';
-        for ($i = 0; $i < count($datas) - 1; $i++) {
-            $path .= '/' . $datas[$i];
-        }
-        $class = $datas[$i];
+        $contents = $this->getTemplateContents();
 
-        $contents =
-            '@extends("' . strtolower($moduleName) . '::layouts.master")
+        $path = strtolower($this->nameSpace .= '/' . $this->className);
+        $filename = 'show.blade.php';
 
-@section("content")
+        $this->createFile($path, $filename, $contents);
+    }
 
-@endsection
-            ';
-        $moduleDirectory = 'Modules/' . $moduleName;
-        $nameSpace = strtolower($moduleDirectory . '/resources/views' . $path . '/' . $class);
-        $fileName = "show.blade.php";
-        $filePath = strtolower($nameSpace . '/' . $fileName);
-
-        if ($this->files->isDirectory($moduleDirectory)) {
-            if ($this->files->isDirectory($nameSpace)) {
-                if ($this->files->isFile($filePath))
-                    return $this->error($class . ' show view already exists!');
-                if (!$this->files->put($filePath, $contents))
-                    return $this->error('failed!');
-                $this->info("$class show view created successfully!");
-            } else {
-                $this->files->makeDirectory($nameSpace, 0777, true, true);
-                if (!$this->files->put($filePath, $contents))
-                    return $this->error('failed!');
-                $this->info("$class show view created successfully!");
-            }
-        } else {
-            return $this->error('Module ' . $moduleName . ' not found!');
-        }
+    protected function getTemplateContents(): string
+    {
+        return (new Stub('/ShowView.stub', [
+            'MODULENAME' => $this->argument('module'),
+            'LOWERMODULENAME' => strtolower($this->argument('module')),
+            'CLASSNAME' => $this->className,
+            'LOWERCLASSNAME' => strtolower($this->className),
+            'PLURALLOWERCLASSNAME' => Str::plural(strtolower($this->className))
+        ]))->render();
     }
 }

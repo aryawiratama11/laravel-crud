@@ -3,7 +3,6 @@
 namespace Wailan\Crud\Commands\Controller;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 use Wailan\Crud\Commands\Traits\CommandGenerator;
 use Wailan\Crud\Services\Stub;
@@ -14,22 +13,16 @@ class CrudController extends Command
 
     protected $signature = 'wailan:crud {class} {module}';
     protected $description = 'Create a new crud controller class for the specified module';
-    protected $files;
-
-    public function __construct(Filesystem $files)
-    {
-        $this->files = $files;
-        parent::__construct();
-    }
 
     public function handle()
     {
         $this->generator('Modules\\' . ucwords($this->argument('module')) . '\Http\Controllers');
 
         $contents = $this->getTemplateContents();
-        $filePath = $this->generateFilePath('Controller.php');
+        $filePath = strtolower($this->nameSpace);
+        $fileName = $this->className . 'Controller.php';
 
-        $this->createFile($filePath, $contents);
+        $this->createFile($filePath, $fileName, $contents);
         $this->callOther($this->className, $this->argument('module'));
     }
 
@@ -54,11 +47,13 @@ class CrudController extends Command
             'model' => $this->className,
             'module' => $this->argument('module')
         ]);
+
         $this->info('Generating repository');
         $this->call('wailan:repository', [
             'class' => $this->argument('class'),
             'module' => $this->argument('module')
         ]);
+
         $this->info('Generating request');
         $this->call('module:make-request', [
             'name' => 'Store' . $this->className . 'Request',
@@ -68,18 +63,21 @@ class CrudController extends Command
             'name' => 'Update' . $this->className . 'Request',
             'module' => $this->argument('module')
         ]);
+
         $this->info('Updating route');
         $this->call('wailan:route-web', [
             'class' => $this->className,
             'module' => $this->argument('module')
         ]);
+
         $this->info('Generating permission');
         $this->call('wailan:permission', [
             'class' => $this->argument('class'),
+            'module' => $this->argument('module')
         ]);
+
         $this->info('Generating migration');
         $this->info('Please wait untill migration finish');
-
         $this->call('make:migration', [
             'name' => 'create' . Str::plural($this->className) . '_table'
         ]);

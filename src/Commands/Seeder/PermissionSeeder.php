@@ -3,93 +3,51 @@
 namespace Wailan\Crud\Commands\Seeder;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
+use Wailan\Crud\Commands\Traits\CommandGenerator;
+use Wailan\Crud\Services\Stub;
 
 class PermissionSeeder extends Command
 {
-    protected $signature = 'wailan:permission {class}';
-    protected $description = 'Create a new permission seeder for the specified class';
-    protected $files;
+    use CommandGenerator;
 
-    public function __construct(Filesystem $files)
-    {
-        $this->files = $files;
-        parent::__construct();
-    }
+    protected $signature = 'wailan:permission {class} {module}';
+    protected $description = 'Create a new permission seeder for the specified class';
 
     public function handle()
     {
-        $class = $this->argument('class');
+        $this->generator('database/seeders');
 
-        $datas = explode('/', $class);
-        $path = '';
-        for ($i = 0; $i < count($datas) - 1; $i++) {
-            $path .= '/' . $datas[$i];
-        }
-        $class = $datas[$i];
+        $contents = $this->getTemplateContents();
 
-        $contents =
-            '<?php
+        $path = strtolower('database/seeders');
+        $filename = $this->className . 'PermissionSeeder.php';
 
-namespace Database\Seeders;
-
-use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
-
-class ' . $class . 'PermissionSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $permissions = [
-            "' . strtolower($class) . '-access",
-            "' . strtolower($class) . '-create",
-            "' . strtolower($class) . '-store",
-            "' . strtolower($class) . '-edit",
-            "' . strtolower($class) . '-show",
-            "' . strtolower($class) . '-update",
-            "' . strtolower($class) . '-delete",
-        ];
-
-        $permissionsColor = [
-            "#563d7c",
-            "#563d7c",
-            "#563d7c",
-            "#563d7c",
-            "#563d7c",
-            "#563d7c",
-            "#563d7c",
-        ];
-
-        for ($i = 0; $i < count($permissions); $i++) {
-            Permission::create([
-                "name" => $permissions[$i],
-                "color" => $permissionsColor[$i]
-            ]);
-        }
+        $this->createFile($path, $filename, $contents);
     }
-}
-            ';
-        $basePath = 'database/seeders';
-        $fileName = $class . "PermissionSeeder.php";
-        $filePath = $basePath . '/' . $fileName;
 
-        if ($this->files->isDirectory($basePath)) {
-            if ($this->files->isFile($filePath))
-                return $this->error($class . ' permission seeder already exists!');
-            if (!$this->files->put($filePath, $contents))
-                return $this->error('failed!');
-            $this->info("$class permission seeder created successfully!");
-        } else {
-            $this->files->makeDirectory($basePath, 0777, true, true);
-            if (!$this->files->put($filePath, $contents))
-                return $this->error('failed!');
-            $this->info("$class permission seeder created successfully!");
-        }
+    protected function getTemplateContents(): string
+    {
+        $colors = [
+            'Black' => '#000000',
+            'Blue' => '#0000FF',
+            'Gray' => '#808080',
+            'Green' => '#008000',
+            'Purple' => '#800080',
+            'Red' => '#FF0000',
+            'White' => '#FFFFFF',
+            'AliceBlue' => '#F0F8FF',
+            'Coral' => '#FF7F50',
+            'FireBrick' => '#B22222',
+            'HotPink' => '#FF69B4',
+            'LemonChiffon' => '#FFFACD',
+        ];
+
+        $name = $this->choice('Pick a color for your permission', $colors);
+
+        return (new Stub('/Seeder.stub', [
+            'CLASSNAME' => $this->className,
+            'LOWERCLASSNAME' => strtolower($this->className),
+            'COLOR' => $colors[$name]
+        ]))->render();
     }
 }

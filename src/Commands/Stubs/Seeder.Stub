@@ -1,0 +1,44 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+
+class $CLASSNAME$PermissionSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $permissions = [
+            "$LOWERCLASSNAME$-access",
+            "$LOWERCLASSNAME$-create",
+            "$LOWERCLASSNAME$-store",
+            "$LOWERCLASSNAME$-edit",
+            "$LOWERCLASSNAME$-show",
+            "$LOWERCLASSNAME$-update",
+            "$LOWERCLASSNAME$-delete",
+        ];
+
+        $permissionsColor = [
+            "$COLOR$",
+            "$COLOR$",
+            "$COLOR$",
+            "$COLOR$",
+            "$COLOR$",
+            "$COLOR$",
+            "$COLOR$",
+        ];
+
+        for ($i = 0; $i < count($permissions); $i++) {
+            Permission::create([
+                "name" => $permissions[$i],
+                "color" => $permissionsColor[$i]
+            ]);
+        }
+    }
+}

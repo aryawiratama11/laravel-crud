@@ -11,7 +11,7 @@ class ShowView extends Command
 {
     use CommandGenerator;
 
-    protected $signature = 'wailan:view-show {class} {module}';
+    protected $signature = 'wailan:view-show {class} {module} {master}';
     protected $description = 'Create a new show view for the specified class and module';
 
     public function handle()
@@ -33,7 +33,8 @@ class ShowView extends Command
             'LOWERMODULENAME' => strtolower($this->argument('module')),
             'CLASSNAME' => $this->className,
             'LOWERCLASSNAME' => strtolower($this->className),
-            'PLURALLOWERCLASSNAME' => Str::plural(strtolower($this->className))
+            'PLURALLOWERCLASSNAME' => Str::plural(strtolower($this->className)),
+            'MASTERVIEW' => $this->argument('master')
         ]))->render();
     }
 }

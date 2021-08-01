@@ -1,4 +1,4 @@
-@extends("$LOWERMODULENAME$::layouts.master")
+@extends("$MASTERVIEW$::layouts.master")
 
 @section("content")
     <div class="row">
@@ -37,7 +37,7 @@
                         @forelse ($$PLURALLOWERCLASSNAME$ as $$LOWERCLASSNAME$)
                             <tr>
                                 <th scope="row">
-                                    {{ ($$PLURALLOWERCLASSNAME$->currentpage() - 1) * $$PLURALLOWERCLASSNAME$)->perpage() + $loop->index + 1 }}
+                                    {{ ($$PLURALLOWERCLASSNAME$->currentpage() - 1 * $$PLURALLOWERCLASSNAME$)->perpage() + $loop->index + 1 }}
                                 </th>
                                 <td>
                                     <div class="btn-group">
@@ -75,7 +75,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="text-center">
-                                    No user found
+                                    No $CLASSNAME$ found
                                 </td>
                             </tr>
                         @endforelse

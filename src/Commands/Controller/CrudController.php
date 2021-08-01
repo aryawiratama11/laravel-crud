@@ -83,22 +83,31 @@ class CrudController extends Command
         ]);
 
         if ($this->confirm('Do you want to generate CRUD View?', true)) {
+            $modules = array_diff(scandir('Modules'), array('.', '..'));
+            $master = $this->choice(
+                'Choose master module for view',
+                $modules
+            );
             $this->info('Generating CRUD View');
             $this->call('wailan:view-create', [
                 'class' => $this->argument('class'),
-                'module' => $this->argument('module')
+                'module' => $this->argument('module'),
+                'master' => strtolower($master)
             ]);
             $this->call('wailan:view-index', [
                 'class' => $this->argument('class'),
-                'module' => $this->argument('module')
+                'module' => $this->argument('module'),
+                'master' => strtolower($master)
             ]);
             $this->call('wailan:view-edit', [
                 'class' => $this->argument('class'),
-                'module' => $this->argument('module')
+                'module' => $this->argument('module'),
+                'master' => strtolower($master)
             ]);
             $this->call('wailan:view-show', [
                 'class' => $this->argument('class'),
-                'module' => $this->argument('module')
+                'module' => $this->argument('module'),
+                'master' => strtolower($master)
             ]);
         }
 

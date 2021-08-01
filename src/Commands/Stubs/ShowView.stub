@@ -1,4 +1,4 @@
-@extends("$LOWERMODULENAME$::layouts.master")
+@extends("$MASTERVIEW$::layouts.master")
 
 @section("content")
 

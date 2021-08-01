@@ -10,7 +10,7 @@ use Wailan\Crud\Services\Stub;
 class IndexView extends Command
 {
     use CommandGenerator;
-    protected $signature = 'wailan:view-index {class} {module}';
+    protected $signature = 'wailan:view-index {class} {module} {master}';
     protected $description = 'Create a new index view for the specified class and module';
 
     public function handle()
@@ -32,7 +32,8 @@ class IndexView extends Command
             'LOWERMODULENAME' => strtolower($this->argument('module')),
             'CLASSNAME' => $this->className,
             'LOWERCLASSNAME' => strtolower($this->className),
-            'PLURALLOWERCLASSNAME' => Str::plural(strtolower($this->className))
+            'PLURALLOWERCLASSNAME' => Str::plural(strtolower($this->className)),
+            'MASTERVIEW' => $this->argument('master')
         ]))->render();
     }
 }

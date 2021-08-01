@@ -19,7 +19,7 @@ class PermissionSeeder extends Command
 
         $contents = $this->getTemplateContents();
 
-        $path = strtolower('database/seeders');
+        $path = 'database/seeders';
         $filename = $this->className . 'PermissionSeeder.php';
 
         $this->createFile($path, $filename, $contents);

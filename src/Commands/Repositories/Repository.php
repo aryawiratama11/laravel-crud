@@ -18,7 +18,7 @@ class Repository extends Command
         $this->generator('Modules\\' . ucwords($this->argument('module')) . '\Http\Repositories');
 
         $contents = $this->getTemplateContents();
-        $filePath = strtolower($this->nameSpace);
+        $filePath = $this->nameSpace;
         $fileName = $this->className.'Repository.php';
 
         $this->createFile($filePath,$fileName, $contents);

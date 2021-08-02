@@ -30,7 +30,7 @@ class $CLASSNAME$Controller extends Controller
         abort_if(Gate::denies("$LOWERCLASSNAME$-store"), 403);
 
         $$LOWERCLASSNAME$ = new $CLASSNAME$();
-        $$LOWERCLASSNAME$ = $CLASSNAME$Repository::storeOrUpdate($$LOWERCLASSNAME$, $request->validated());
+        $$LOWERCLASSNAME$ = $CLASSNAME$Repository::storeOrUpdate($$LOWERCLASSNAME$, $request);
 
         return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Created");
     }
@@ -53,7 +53,7 @@ class $CLASSNAME$Controller extends Controller
     {
         abort_if(Gate::denies("$LOWERCLASSNAME$-update"), 403);
 
-        $$LOWERCLASSNAME$ = $CLASSNAME$Repository::storeOrUpdate($$LOWERCLASSNAME$, $request->validated());
+        $$LOWERCLASSNAME$ = $CLASSNAME$Repository::storeOrUpdate($$LOWERCLASSNAME$, $request);
 
         return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Updated");
     }

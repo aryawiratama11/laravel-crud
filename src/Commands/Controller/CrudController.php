@@ -114,8 +114,10 @@ class CrudController extends Command
         $this->line('========================================');
         $this->info('CRUD installation completed');
         $this->info('Dont forget to');
-        $this->info('Setup database migration and run');
-        $this->info('php artisan migrate --seed');
+        $this->info('Setup database migration');
+        $this->info('php artisan migrate');
+        $this->info('and');
+        $this->info('php artisan db:seed --class=' . $this->className . 'PermissionSeeder');
         $this->line('========================================');
     }
 }

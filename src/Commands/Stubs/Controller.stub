@@ -5,9 +5,9 @@ namespace $NAMESPACE$;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
 use Modules\$MODULENAME$\Entities\$CLASSNAME$;
-use Modules\$MODULENAME$\Http\Repositories$CLASSFOLDER$\$CLASSNAME$Repository;
 use Modules\$MODULENAME$\Http\Requests\Store$CLASSNAME$Request;
 use Modules\$MODULENAME$\Http\Requests\Update$CLASSNAME$Request;
+// use Modules\$MODULENAME$\Http\Services$CLASSFOLDER$\$CLASSNAME$Service;
 
 class $CLASSNAME$Controller extends Controller
 {
@@ -29,8 +29,7 @@ class $CLASSNAME$Controller extends Controller
     {
         abort_if(Gate::denies("$LOWERCLASSNAME$-store"), 403);
 
-        $$LOWERCLASSNAME$ = new $CLASSNAME$();
-        $$LOWERCLASSNAME$ = $CLASSNAME$Repository::storeOrUpdate($$LOWERCLASSNAME$, $request);
+        $$LOWERCLASSNAME$ = $CLASSNAME$::create($request->validated());
 
         return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Created");
     }
@@ -53,7 +52,7 @@ class $CLASSNAME$Controller extends Controller
     {
         abort_if(Gate::denies("$LOWERCLASSNAME$-update"), 403);
 
-        $$LOWERCLASSNAME$ = $CLASSNAME$Repository::storeOrUpdate($$LOWERCLASSNAME$, $request);
+        $$LOWERCLASSNAME$->update($request->validated());
 
         return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Updated");
     }
@@ -61,6 +60,7 @@ class $CLASSNAME$Controller extends Controller
     public function destroy($CLASSNAME$ $$LOWERCLASSNAME$)
     {
         abort_if(Gate::denies("$LOWERCLASSNAME$-delete"), 403);
+
         $$LOWERCLASSNAME$->delete();
 
         return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Deleted!");

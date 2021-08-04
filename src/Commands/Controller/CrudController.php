@@ -48,8 +48,8 @@ class CrudController extends Command
             'module' => $this->argument('module')
         ]);
 
-        $this->info('Generating repository');
-        $this->call('wailan:repository', [
+        $this->info('Generating service');
+        $this->call('wailan:service', [
             'class' => $this->argument('class'),
             'module' => $this->argument('module')
         ]);

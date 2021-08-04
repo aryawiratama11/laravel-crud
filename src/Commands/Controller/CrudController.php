@@ -11,7 +11,7 @@ class CrudController extends Command
 {
     use CommandGenerator;
 
-    protected $signature = 'wailan:crud {class} {module}';
+    protected $signature = 'concrete:crud {class} {module}';
     protected $description = 'Create a new crud controller class for the specified module';
 
     public function handle()
@@ -49,7 +49,7 @@ class CrudController extends Command
         ]);
 
         $this->info('Generating service');
-        $this->call('wailan:service', [
+        $this->call('concrete:service', [
             'class' => $this->argument('class'),
             'module' => $this->argument('module')
         ]);
@@ -65,13 +65,13 @@ class CrudController extends Command
         ]);
 
         $this->info('Updating route');
-        $this->call('wailan:route-web', [
+        $this->call('concrete:route-web', [
             'class' => $this->className,
             'module' => $this->argument('module')
         ]);
 
         $this->info('Generating permission');
-        $this->call('wailan:permission', [
+        $this->call('concrete:permission', [
             'class' => $this->argument('class'),
             'module' => $this->argument('module')
         ]);
@@ -89,22 +89,22 @@ class CrudController extends Command
                 $modules
             );
             $this->info('Generating CRUD View');
-            $this->call('wailan:view-create', [
+            $this->call('concrete:view-create', [
                 'class' => $this->argument('class'),
                 'module' => $this->argument('module'),
                 'master' => strtolower($master)
             ]);
-            $this->call('wailan:view-index', [
+            $this->call('concrete:view-index', [
                 'class' => $this->argument('class'),
                 'module' => $this->argument('module'),
                 'master' => strtolower($master)
             ]);
-            $this->call('wailan:view-edit', [
+            $this->call('concrete:view-edit', [
                 'class' => $this->argument('class'),
                 'module' => $this->argument('module'),
                 'master' => strtolower($master)
             ]);
-            $this->call('wailan:view-show', [
+            $this->call('concrete:view-show', [
                 'class' => $this->argument('class'),
                 'module' => $this->argument('module'),
                 'master' => strtolower($master)

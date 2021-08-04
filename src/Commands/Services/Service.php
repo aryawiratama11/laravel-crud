@@ -10,7 +10,7 @@ class Service extends Command
 {
     use CommandGenerator;
 
-    protected $signature = 'wailan:service {class} {module}';
+    protected $signature = 'concrete:service {class} {module}';
     protected $description = 'Create a new service class for the specified module';
 
     public function handle()

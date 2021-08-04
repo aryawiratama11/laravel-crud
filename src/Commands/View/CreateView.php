@@ -11,7 +11,7 @@ class CreateView extends Command
 {
     use CommandGenerator;
 
-    protected $signature = 'wailan:view-create {class} {module} {master}';
+    protected $signature = 'concrete:view-create {class} {module} {master}';
     protected $description = 'Create a new create view for the specified class and module';
 
     public function handle()

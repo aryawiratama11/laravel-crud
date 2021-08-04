@@ -11,7 +11,7 @@ class EditView extends Command
 {
     use CommandGenerator;
 
-    protected $signature = 'wailan:view-edit {class} {module} {master}';
+    protected $signature = 'concrete:view-edit {class} {module} {master}';
     protected $description = 'Create a new edit view for the specified class and module';
 
     public function handle()

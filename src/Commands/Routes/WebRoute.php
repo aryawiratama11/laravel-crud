@@ -7,7 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 
 class WebRoute extends Command
 {
-    protected $signature = 'wailan:route-web {class} {module}';
+    protected $signature = 'concrete:route-web {class} {module}';
     protected $description = 'Modify a web routes for the specified class and module';
     protected $files;
 

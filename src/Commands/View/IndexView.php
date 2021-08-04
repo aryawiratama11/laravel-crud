@@ -10,7 +10,7 @@ use Wailan\Crud\Services\Stub;
 class IndexView extends Command
 {
     use CommandGenerator;
-    protected $signature = 'wailan:view-index {class} {module} {master}';
+    protected $signature = 'concrete:view-index {class} {module} {master}';
     protected $description = 'Create a new index view for the specified class and module';
 
     public function handle()

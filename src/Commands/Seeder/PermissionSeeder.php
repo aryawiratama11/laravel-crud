@@ -10,7 +10,7 @@ class PermissionSeeder extends Command
 {
     use CommandGenerator;
 
-    protected $signature = 'wailan:permission {class} {module}';
+    protected $signature = 'concrete:permission {class} {module}';
     protected $description = 'Create a new permission seeder for the specified class';
 
     public function handle()

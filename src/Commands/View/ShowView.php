@@ -11,7 +11,7 @@ class ShowView extends Command
 {
     use CommandGenerator;
 
-    protected $signature = 'wailan:view-show {class} {module} {master}';
+    protected $signature = 'concrete:view-show {class} {module} {master}';
     protected $description = 'Create a new show view for the specified class and module';
 
     public function handle()

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
+use Modules\Permission\Entities\Permission;
 
 class $CLASSNAME$PermissionSeeder extends Seeder
 {
@@ -36,9 +36,8 @@ class $CLASSNAME$PermissionSeeder extends Seeder
 
         for ($i = 0; $i < count($permissions); $i++) {
             Permission::create([
-                "name" => $permissions[$i],
-                "color" => $permissionsColor[$i]
-            ]);
+                "name" => $permissions[$i]
+            ])->assignColor($permissionsColor[$i]);
         }
     }
 }

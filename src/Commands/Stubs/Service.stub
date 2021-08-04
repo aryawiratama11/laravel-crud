@@ -1,0 +1,9 @@
+<?php
+namespace $NAMESPACE$;
+
+use Modules\$MODULENAME$\Entities\$CLASSNAME$;
+
+class $CLASSNAME$Service
+{
+    // create your logic here!
+}

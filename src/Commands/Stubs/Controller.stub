@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Gate;
 use Modules\$MODULENAME$\Entities\$CLASSNAME$;
 use Modules\$MODULENAME$\Http\Requests\Store$CLASSNAME$Request;
 use Modules\$MODULENAME$\Http\Requests\Update$CLASSNAME$Request;
-// use Modules\$MODULENAME$\Http\Services$CLASSFOLDER$\$CLASSNAME$Service;
+// use Modules\$MODULENAME$\Http\Services$CLASSFOLDER$\$CLASSNAME$Service; //Use this service if you want to store some logic
 
 class $CLASSNAME$Controller extends Controller
 {
@@ -61,8 +61,12 @@ class $CLASSNAME$Controller extends Controller
     {
         abort_if(Gate::denies("$LOWERCLASSNAME$-delete"), 403);
 
-        $$LOWERCLASSNAME$->delete();
+        try {
+            $$LOWERCLASSNAME$->delete();
 
-        return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Deleted!");
+            return redirect()->route("$LOWERMODULENAME$.$VIEW$$LOWERCLASSNAME$.index")->with("success", $$LOWERCLASSNAME$->name . " Deleted!");
+        } catch(\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
     }
 }

@@ -60,7 +60,7 @@
                                             @endcan
                                             @can("$LOWERMODULENAME$-delete")
                                             <div class="dropdown-divider"></div>
-                                            <form onsubmit="return confirm("Are you sure?")"
+                                            <form onsubmit="return confirm('Are you sure?')"
                                                 action="{{ route("$LOWERMODULENAME$.$LOWERCLASSNAME$.destroy", ["$LOWERCLASSNAME$" => $$LOWERCLASSNAME$]) }}"
                                                 method="POST">
                                                 @method("DELETE")

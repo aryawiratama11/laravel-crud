@@ -17,7 +17,7 @@ class $CLASSNAME$Controller extends Controller
 
         if(request()->ajax()) return $CLASSNAME$Service::ajax();
 
-        return view("$LOWERMODULENAME$::$VIEW$$LOWERCLASSNAME$.index", compact("$PLURALLOWERCLASSNAME$"));
+        return view("$LOWERMODULENAME$::$VIEW$$LOWERCLASSNAME$.index");
     }
 
     public function create()

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Gate;
 use Modules\$MODULENAME$\Entities\$CLASSNAME$;
 use Modules\$MODULENAME$\Http\Requests\Store$CLASSNAME$Request;
 use Modules\$MODULENAME$\Http\Requests\Update$CLASSNAME$Request;
-// use Modules\$MODULENAME$\Http\Services$CLASSFOLDER$\$CLASSNAME$Service; //Use this service if you want to store some logic
+use Modules\$MODULENAME$\Http\Services$CLASSFOLDER$\$CLASSNAME$Service;
 
 class $CLASSNAME$Controller extends Controller
 {
@@ -15,7 +15,8 @@ class $CLASSNAME$Controller extends Controller
     {
         abort_if(Gate::denies("$LOWERCLASSNAME$-access"), 403);
 
-        $$PLURALLOWERCLASSNAME$ = $CLASSNAME$::paginate(5);
+        if(request()->ajax()) return $CLASSNAME$Service::ajax();
+
         return view("$LOWERMODULENAME$::$VIEW$$LOWERCLASSNAME$.index", compact("$PLURALLOWERCLASSNAME$"));
     }
 

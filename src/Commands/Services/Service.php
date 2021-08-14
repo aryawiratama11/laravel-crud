@@ -19,9 +19,9 @@ class Service extends Command
 
         $contents = $this->getTemplateContents();
         $filePath = $this->nameSpace;
-        $fileName = $this->className.'Service.php';
+        $fileName = $this->className . 'Service.php';
 
-        $this->createFile($filePath,$fileName, $contents);
+        $this->createFile($filePath, $fileName, $contents);
     }
 
     protected function getTemplateContents(): string
@@ -29,6 +29,7 @@ class Service extends Command
         return (new Stub('/service.stub', [
             'NAMESPACE' => $this->nameSpace,
             'MODULENAME' => $this->argument('module'),
+            'LOWERMODULENAME' => strtolower($this->argument('module')),
             'CLASSNAME' => $this->className,
             'LOWERCLASSNAME' => strtolower($this->className),
         ]))->render();

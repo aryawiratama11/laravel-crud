@@ -11,22 +11,11 @@
                         </a>
                     @endcan
                 </div>
-                <div class="col-sm">
-                    <form>
-                        <div class="input-group rounded">
-                            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-                                aria-describedby="search-addon" name="search" value="{{ request()->input("search") }}" />
-                            <button class="input-group-text border-0" type="submit">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
-        <div class="col-lg-12 bg-white p-0 border rounded shadow-sm">
+        <div class="col-lg-12 bg-white border rounded shadow-sm p-2">
             <div class="table-responsive">
-                <table class="table table-sm table-hover">
+                <table class="table table-sm table-hover yajra-datatable">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -34,57 +23,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($$PLURALLOWERCLASSNAME$ as $$LOWERCLASSNAME$)
-                            <tr>
-                                <th scope="row">
-                                    {{ ($$PLURALLOWERCLASSNAME$->currentpage() - 1) * $$PLURALLOWERCLASSNAME$->perpage() + $loop->index + 1 }}
-                                </th>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm" type="button" data-boundary="viewport"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            @can("$LOWERMODULENAME$-access")
-                                                <a class="dropdown-item"
-                                                    href="{{ route("$LOWERMODULENAME$.$LOWERCLASSNAME$.show", ["$LOWERCLASSNAME$" => $$LOWERCLASSNAME$]) }}">
-                                                    Show
-                                                </a>
-                                            @endcan
-                                            @can("$LOWERMODULENAME$-edit")
-                                            <a class="dropdown-item"
-                                                href="{{ route("$LOWERMODULENAME$.$LOWERCLASSNAME$.edit", ["$LOWERCLASSNAME$" => $$LOWERCLASSNAME$]) }}">
-                                                Edit
-                                            </a>
-                                            @endcan
-                                            @can("$LOWERMODULENAME$-delete")
-                                            <div class="dropdown-divider"></div>
-                                            <form onsubmit="return confirm('Are you sure?')"
-                                                action="{{ route("$LOWERMODULENAME$.$LOWERCLASSNAME$.destroy", ["$LOWERCLASSNAME$" => $$LOWERCLASSNAME$]) }}"
-                                                method="POST">
-                                                @method("DELETE")
-                                                @csrf
-                                                <button class="dropdown-item" type="submit">Delete</button>
-                                            </form>
-                                            @endcan
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-center">
-                                    No $CLASSNAME$ found
-                                </td>
-                            </tr>
-                        @endforelse
                     </tbody>
                 </table>
             </div>
-            <div class="row justify-content-center">
-                {{ $$PLURALLOWERCLASSNAME$->links("pagination::bootstrap-4") }}
-            </div>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        var table = $('.yajra-datatable').DataTable({
+            serverSide: true,
+            processing: true,
+            ajax: "{{ route('$LOWERMODULENAME$.$LOWERCLASSNAME$.index') }}",
+            columns: [{
+                    data: 'DT_RowIndex',
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    data: 'name'
+                },
+                {
+                    data: 'action'
+                }
+            ],
+        });
+    </script>
 @endsection

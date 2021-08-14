@@ -1,9 +1,58 @@
 <?php
 namespace $NAMESPACE$;
 
+use Illuminate\Support\Facades\Gate;
 use Modules\$MODULENAME$\Entities\$CLASSNAME$;
+use Modules\$MODULENAME$\Transformers\$CLASSNAME$Resource;
+use Yajra\DataTables\Facades\DataTables;
 
 class $CLASSNAME$Service
 {
-    // create your logic here!
+    public static function ajax()
+    {
+        $data = DataTables::of($CLASSNAME$Resource::collection($CLASSNAME$::orderByDesc('updated_at')->get()));
+        return $data
+            ->addColumn('action', function ($data) {
+                $actionBtn = '
+                    <div class="btn-group">
+                        <button class="btn btn-sm" type="button" data-boundary="viewport"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">';
+                            if (Gate::allows('$LOWERCLASSNAME$-show')) {
+                                $actionBtn = $actionBtn . '
+                                <a class="dropdown-item"
+                                    href="' . route("$LOWERMODULENAME$.$LOWERCLASSNAME$.show", ["$LOWERCLASSNAME$" => $data['id']]) . '">
+                                    Show
+                                </a>';
+                            }
+                            if (Gate::allows('$LOWERCLASSNAME$-edit')) {
+                                $actionBtn = $actionBtn . '
+                                <a class="dropdown-item"
+                                    href="' . route("$LOWERMODULENAME$.$LOWERCLASSNAME$.edit", ["$LOWERCLASSNAME$" => $data['id']]) . '">
+                                    Edit
+                                </a>';
+                            }
+                            if (Gate::allows("$LOWERCLASSNAME$-delete")) {
+                                $actionBtn = $actionBtn . '
+                            <div class="dropdown-divider"></div>
+                            <form onsubmit="return confirm(\'Are you sure want to permanently delete this item?\')"
+                                action="' . route("$LOWERMODULENAME$.$LOWERCLASSNAME$.destroy", ["$LOWERCLASSNAME$" => $data['id']]) . '"
+                                method="POST">
+                                ' . method_field("DELETE") . '
+                                ' . csrf_field() . '
+                                <button class="dropdown-item" type="submit">Delete</button>
+                            </form>';
+                            }
+                            '
+                        </div>
+                    </div>
+                    ';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->toJson();
+    }
 }

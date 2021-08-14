@@ -56,7 +56,7 @@ class CrudController extends Command
 
         $this->info('Generating resource');
         $this->call('module:make-resource', [
-            'class' => $this->argument('class') . 'Resource',
+            'name' => $this->argument('class') . 'Resource',
             'module' => $this->argument('module')
         ]);
 

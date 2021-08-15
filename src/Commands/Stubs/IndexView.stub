@@ -16,14 +16,6 @@
         <div class="col-lg-12 bg-white border rounded shadow-sm p-2">
             <div class="table-responsive">
                 <table class="table table-sm table-hover yajra-datatable">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">#</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -42,7 +34,8 @@
                     orderable: false
                 },
                 //{
-                //    data: 'name'
+                //    title: 'Name',
+                //    data: 'name',
                 //},
                 {
                     data: 'action'

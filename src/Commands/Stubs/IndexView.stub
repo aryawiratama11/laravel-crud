@@ -41,9 +41,9 @@
                     searchable: false,
                     orderable: false
                 },
-                {
-                    data: 'name'
-                },
+                //{
+                //    data: 'name'
+                //},
                 {
                     data: 'action'
                 }
